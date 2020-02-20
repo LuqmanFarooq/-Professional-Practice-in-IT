@@ -9,14 +9,14 @@ var PageSchema = mongoose.Schema({
         required: true
     },
     slug: {
-        type: String,
+        type: String
     },
     content: {
         type: String,
         required: true
     },
     sorting: {
-        type: Number,
+        type: Number
     }
 });
 

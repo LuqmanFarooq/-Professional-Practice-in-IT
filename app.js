@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 // connect to db
-mongoose.connect(config.database);
+mongoose.connect(config.database,{ useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error',console.error.bind(console,'connection error'));
 db.once('open', function(){
