@@ -50,6 +50,7 @@ router.post('/add-page', function (req, res) {
 
     var errors = req.validationErrors();
 
+
     if (errors) {
 
         res.render('admin/add_page', {
@@ -86,8 +87,7 @@ router.post('/add-page', function (req, res) {
                     if (err) {
                         return console.log(err);
                     }
-
-                    req.flash('Success', 'Page added!');
+                    req.flash('success', 'Page added!');
                     res.redirect('/admin/pages');
                 });
 
@@ -175,7 +175,7 @@ router.post('/edit-page/:id', function (req, res) {
     }
     else {
         // findone is the mongoose method to find unique obect
-        Page.findOne({ slug: slug, _id: {'$ne': id} }, function (err, page) {
+        Page.findOne({ slug: slug, _id: { '$ne': id } }, function (err, page) {
             // if there is page it means slug is not unique
             if (page) {
                 req.flash('danger', 'Page slug already exists', 'choose another.');
@@ -196,8 +196,8 @@ router.post('/edit-page/:id', function (req, res) {
                     content: content,
                     sorting: 100
                 });
-                
-                
+
+
                 Page.findById(id, function (err, page) {
                     if (err) return console.log(err);
 
@@ -205,13 +205,12 @@ router.post('/edit-page/:id', function (req, res) {
                     page.slug = slug;
                     page.content = content;
 
-                    page.save(function(err) {
-                        if(err)
-                        {
+                    page.save(function (err) {
+                        if (err) {
                             return console.log(err);
                         }
 
-                        req.flash('Success','Page added!');
+                        req.flash('success', 'Page Edited!');
                         res.redirect('/admin/pages');
                     });
                 });
@@ -221,5 +220,18 @@ router.post('/edit-page/:id', function (req, res) {
 
 });
 
+
+/*
+ Get Delete page
+ getting data from databse page collection
+*/
+router.get('/delete-page/:id', function (req, res) {
+    Page.findByIdAndRemove(req.params.id, function (err) {
+        if (err) return console.log(err);
+
+        req.flash('success', 'Page Deleted!');
+        res.redirect('/admin/pages/');
+    });
+});
 // Exports
 module.exports = router;

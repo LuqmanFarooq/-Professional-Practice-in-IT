@@ -36,9 +36,9 @@ app.use(bodyParser.json());
 // Express Session middleware
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true}
+    resave: true,
+    saveUninitialized: true
+ //   cookie: { secure: true}
 }));
 
 // Express validator middleware
