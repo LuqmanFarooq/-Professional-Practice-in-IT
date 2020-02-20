@@ -70,10 +70,12 @@ app.use(function (req, res, next) {
 // set routes
 var pages = require('./routes/pages.js');
 var adminpages = require('./routes/admin_pages.js');
+var adminCategories = require('./routes/admin_categories.js');
 
 // whenever route is called it will take to the pages.js and then to route
 app.use('/',pages);
 app.use('/admin/pages',adminpages);
+app.use('/admin/categories',adminCategories);
 
 // start the server
 var port = 3000;
