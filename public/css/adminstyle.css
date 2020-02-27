@@ -6,4 +6,11 @@
     border: 1px dashed rgb(0, 0, 0);
 }
 
+#imgPreview {
+    margin: 20px;
+}
 
+#noimage {
+    width: 100px;
+    height: 100px;
+}
