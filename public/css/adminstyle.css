@@ -6,4 +6,6 @@
     border: 1px dashed rgb(0, 0, 0);
 }
 
-
+#imgPreview {
+    margin: 20px;
+}
