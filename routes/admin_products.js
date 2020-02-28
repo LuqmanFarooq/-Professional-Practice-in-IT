@@ -85,7 +85,7 @@ router.post('/add-product', function (req, res) {
             });
         });
     } else {
-        Product.findOne({slug: slug}, function (err, product) {
+        Product.findOne({ slug: slug }, function (err, product) {
             if (product) {
                 req.flash('danger', 'Product title exists, choose another.');
                 Category.find(function (err, categories) {
@@ -113,16 +113,22 @@ router.post('/add-product', function (req, res) {
                     if (err)
                         return console.log(err);
 
-                    mkdirp('public/product_images/' + product._id);
+                    fs.mkdirp('public/product_images/' + product._id, function (err) {
+                        return console.log(err);
+                    });
 
-                    mkdirp('public/product_images/' + product._id + '/gallery');
+                    fs.mkdirp('public/product_images/' + product._id + '/gallery', function (err) {
+                        return console.log(err);
+                    });
 
-                    mkdirp('public/product_images/' + product._id + '/gallery/thumbs');
+                    fs.mkdirp('public/product_images/' + product._id + '/gallery/thumbs', function (err) {
+                        return console.log(err);
+                    });
 
                     if (imageFile != "") {
                         var productImage = req.files.image;
                         var path = 'public/product_images/' + product._id + '/' + imageFile;
-                        
+
                         productImage.mv(path, function (err) {
                             return console.log(err);
                         });
@@ -215,7 +221,7 @@ router.post('/edit-product/:id', function (req, res) {
         req.session.errors = errors;
         res.redirect('/admin/products/edit-product/' + id);
     } else {
-        Product.findOne({slug: slug, _id: {'$ne': id}}, function (err, p) {
+        Product.findOne({ slug: slug, _id: { '$ne': id } }, function (err, p) {
             if (err)
                 console.log(err);
 
@@ -268,17 +274,74 @@ router.post('/edit-product/:id', function (req, res) {
 
 });
 
+/*
+ Post  product Gallery
+*/
+router.post('/product-gallery/:id', function (req, res) {
+
+    var productImage = req.files.file;
+    var id = req.params.id;
+    var path = 'public/product_images/' + id + '/gallery/' + req.files.file.name;
+    var thumbsPath = 'public/product_images/' + id + '/gallery/thumbs/' + req.files.file.name;
+
+    productImage.mv(path, function (err) {
+        if (err)
+            console.log(err);
+
+        resizeImg(fs.readFileSync(path), { width: 100, height: 100 }).then(function (buf) {
+            fs.writeFileSync(thumbsPath, buf);
+        });
+    });
+
+    res.sendStatus(200);
+
+});
 
 /*
- Get Delete page
+ Get Delete image
+*/
+router.get('/delete-image/:image', function (req, res) {
+    var originalImage = 'public/product_images/' + req.query.id + '/gallery/' + req.params.image;
+    var thumbImage = 'public/product_images/' + req.query.id + '/gallery/thumbs/' + req.params.image;
+    // function to remove image
+    fs.remove(originalImage, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            fs.remove(thumbImage, function (err) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    req.flash('success', 'Image Deleted Successfully!');
+                    res.redirect('/admin/products/edit-product/' + req.query.id);
+                }
+            });
+        }
+    });
+});
+
+/*
+ Get Delete product
  getting data from databse page collection
 */
-router.get('/delete-page/:id', function (req, res) {
-    Page.findByIdAndRemove(req.params.id, function (err) {
-        if (err) return console.log(err);
+router.get('/delete-product/:id', function (req, res) {
 
-        req.flash('success', 'Page Deleted!');
-        res.redirect('/admin/pages/');
+    var id = req.params.id;
+    var path = 'public/product_images/' + id;
+
+    fs.remove(path, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            Product.findByIdAndRemove(id, function (err) {
+                console.log(err);
+            });
+            req.flash('success', 'Product Deleted Successfully!');
+            res.redirect('/admin/products');
+        }
     });
 });
 // Exports

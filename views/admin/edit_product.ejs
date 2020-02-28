@@ -103,6 +103,7 @@
     Dropzone.options.dropzoneForm = {
         acceptedFiles: "image/*",
         init: function() {
+            // queue waits for all the files to upload
             this.on("queuecomplete", function(file) {
                setTimeout(function() {
                 location.reload()
