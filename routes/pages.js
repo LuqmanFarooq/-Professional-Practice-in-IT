@@ -18,7 +18,7 @@ router.get('/', function(req,res){
             });
         
     });
-})
+});
 
 /*
  * Get a page
