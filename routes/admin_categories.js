@@ -10,8 +10,8 @@ var Category = require('../models/category');
  getting data from databse categories collection
 */
 router.get('/', function (req, res) {
-    
-    Category.find(function (err,categories) {
+
+    Category.find(function (err, categories) {
         if (err) return console.log(err);
         res.render('admin/categories', {
             categories: categories
@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
 router.get('/add-category', function (req, res) {
 
     var title = "";
-    
+
     res.render('admin/add_category', {
         title: title
     });
@@ -38,10 +38,10 @@ router.get('/add-category', function (req, res) {
 router.post('/add-category', function (req, res) {
 
     req.check('title').not().isEmpty().withMessage('Title is required cannot be empty');
-    
+
     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
-    
+
     var errors = req.validationErrors();
 
     if (errors) {
@@ -73,6 +73,15 @@ router.post('/add-category', function (req, res) {
                     if (err) {
                         return console.log(err);
                     }
+                    // GET all categories to pass to header.ejs
+                    Category.find(function (err, categories) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        else {
+                            req.app.locals.categories = categories;
+                        }
+                    });
                     req.flash('success', 'Category added!');
                     res.redirect('/admin/categories');
                 });
@@ -114,7 +123,7 @@ router.post('/edit-category/:id', function (req, res) {
 
     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
-    
+
     var id = req.params.id;
     var errors = req.validationErrors();
 
@@ -139,19 +148,27 @@ router.post('/edit-category/:id', function (req, res) {
             }
             // else if slug is unique sav in a variable
             else {
-                
+
                 Category.findById(id, function (err, category) {
                     if (err) return console.log(err);
 
                     category.title = title;
                     category.slug = slug;
-                   
+
 
                     category.save(function (err) {
                         if (err) {
                             return console.log(err);
                         }
-
+                        // GET all categories to pass to header.ejs
+                        Category.find(function (err, categories) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            else {
+                                req.app.locals.categories = categories;
+                            }
+                        });
                         req.flash('success', 'Category Edited!');
                         res.redirect('/admin/categories');
                     });
@@ -170,7 +187,15 @@ router.post('/edit-category/:id', function (req, res) {
 router.get('/delete-category/:id', function (req, res) {
     Category.findByIdAndRemove(req.params.id, function (err) {
         if (err) return console.log(err);
-
+        // GET all categories to pass to header.ejs
+        Category.find(function (err, categories) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                req.app.locals.categories = categories;
+            }
+        });
         req.flash('success', 'Category Deleted!');
         res.redirect('/admin/categories/');
     });
