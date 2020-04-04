@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var fileUpload = require('express-fileupload');
+var passport = require('passport'); 
 // connect to db
 mongoose.connect(config.database, { useNewUrlParser: true });
 var db = mongoose.connection;
@@ -116,10 +117,17 @@ app.use(function (req, res, next) {
     next();
 });
 
+// passport config file require
+require('./config/passport')(passport);
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // the way the cart is gonna work is it will be a session called cart which is goonna be an array which will hold objects (products)
 // the following code make it available everywhere
 app.get('*',function(req,res,next) {
     res.locals.cart = req.session.cart;
+    res.locals.user = req.user || null;
     next();
  });
 
@@ -127,6 +135,7 @@ app.get('*',function(req,res,next) {
 var pages = require('./routes/pages.js');
 var products = require('./routes/products.js');   
 var cart = require('./routes/cart.js');  
+var users = require('./routes/users.js');  
 var adminpages = require('./routes/admin_pages.js');
 var adminCategories = require('./routes/admin_categories.js');
 var adminProducts = require('./routes/admin_products.js');
@@ -139,7 +148,7 @@ app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
 app.use('/products', products);
 app.use('/cart', cart);
-
+app.use('/users', users );
 // start the server
 var port = 3000;
 

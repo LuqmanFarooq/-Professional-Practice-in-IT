@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "ejs": "^3.0.1",
@@ -23,6 +24,8 @@
     "mkdirp": "^1.0.3",
     "mongoose": "^5.8.11",
     "nodemon": "^2.0.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "resize-img": "^2.0.0"
   }
 }
