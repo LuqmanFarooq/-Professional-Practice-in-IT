@@ -142,13 +142,14 @@ var adminProducts = require('./routes/admin_products.js');
 
 
 // whenever route is called it will take to the pages.js and then to route
-app.use('/products', products);
-app.use('/', pages);
 app.use('/admin/pages', adminpages);
 app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
+app.use('/products', products);
 app.use('/cart', cart);
 app.use('/users', users );
+app.use('/', pages);
+
 // start the server
 var port = 3000;
 

@@ -20,7 +20,7 @@ var Category = require('../models/category');
 router.get('/', isAdmin, function (req, res) {
     var count;
 
-    Product.count(function (err, c) {
+    Product.countDocuments(function (err, c) {
         count = c;
     });
 
