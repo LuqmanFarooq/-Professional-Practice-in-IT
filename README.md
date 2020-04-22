@@ -8,5 +8,25 @@ The admin module contains the access to the admin page on the website. The admin
 * Git Clone the repository
 * cmd in the repository root folder.
 * `npm install` to install the prerequisites.
-* 'node app.js' to run the server.
+* `node app.js` to run the server.
 * Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technologies Used
+* Node
+* Express 
+* EJS templating  
+* MongoDB
+* Mongoose
+* Ajax 
+* Session storage
+* Authentication 
+* Bootstrap 
+* Html 
+* CSS
+* Visual Studio Code
+## Download Supporting Document Pdf or see wiki for more details
+## Authors
+Muhammad Noman Junaid - [GitHub](https://github.com/Nomijee)
+Muhammad Luqman - [GitHub](https://github.com/LuqmanFarooq)
+## License
+This project is licensed under the MIT License - see the LICENSE file for details
+ 
